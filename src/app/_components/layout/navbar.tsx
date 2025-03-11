@@ -3,17 +3,15 @@
 import { siteConfig } from "@/lib/site-config";
 import { useScroll } from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
-// import { RiCloseFill, RiMenuFill } from "@remixicon/react";
 import Link from "next/link";
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import CountrySelector from "@/components/country-selector";
 import { useAppStore } from "@/store/app.store";
 
 export function NavBar() {
   const {selectedCountry, setSelectedCountry} = useAppStore();
-  const [open, setOpen] = React.useState(false);
+  const [open] = React.useState(false);
   const scrolled = useScroll(15);
 
   return (
