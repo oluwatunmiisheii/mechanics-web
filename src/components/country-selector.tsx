@@ -50,14 +50,16 @@ export default function CountrySelector({
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger
         className={cn(
-          "flex items-center gap-2 px-3 py-2 rounded-lg border border-border transition-all",
+          "flex items-center gap-2 px-3 py-2 rounded-lg border border-border transition-all justify-between",
           "hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary/20",
           isOpen && "ring-2 ring-primary/20",
           buttonClassName
         )}
       >
-        <span className="text-base">{selectedCountry.flag}</span>
-        <span className="text-sm font-medium">{selectedCountry.name}</span>
+        <div className="space-x-1 flex items-center">
+          <span className="text-base">{selectedCountry.flag}</span>
+          <span className="text-sm font-medium">{selectedCountry.name}</span>
+        </div>
         <ChevronDown className="w-4 h-4 text-muted-foreground" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
