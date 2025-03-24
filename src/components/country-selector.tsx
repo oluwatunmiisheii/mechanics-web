@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import {
@@ -7,58 +9,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { useCountries } from "@/context/countries.context";
+import { parseAsString, useQueryState } from "nuqs";
 
-export type Country = {
-  id: string;
-  name: string;
-  flag: string;
-};
 
-const countries: Country[] = [
-  {
-    id: "usa",
-    name: "United States",
-    flag: "🇺🇸",
-  },
-  {
-    id: "uk",
-    name: "United Kingdom",
-    flag: "🇬🇧",
-  },
-  {
-    id: "canada",
-    name: "Canada",
-    flag: "🇨🇦",
-  },
-];
-
-interface CountrySelectorProps {
-  selectedCountry: Country;
-  onCountryChange: (country: Country) => void;
-  className?: string;
-  buttonClassName?: string;
-}
-
-export default function CountrySelector({
-  selectedCountry,
-  onCountryChange,
-  buttonClassName,
-}: CountrySelectorProps) {
+export default function CountrySelector() {
+  const { countries, selectedCountry, setSelectedCountry } = useCountries();
+  const [, setCountry] = useQueryState("country", parseAsString.withDefault(selectedCountry?.slug ?? ""));
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger
         className={cn(
-          "flex items-center gap-2 px-3 py-2 rounded-lg border border-border transition-all justify-between",
+          "flex items-center gap-2 px-3 rounded-lg border border-border transition-all justify-between w-full sm:w-auto bg-white/90 hover:bg-white py-3",
           "hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary/20",
-          isOpen && "ring-2 ring-primary/20",
-          buttonClassName
+          isOpen && "ring-2 ring-primary/20"
         )}
       >
         <div className="space-x-1 flex items-center">
-          <span className="text-base">{selectedCountry.flag}</span>
-          <span className="text-sm font-medium">{selectedCountry.name}</span>
+          <span className="text-base">{selectedCountry?.flag_unicode}</span>
+          <span className="text-sm font-medium">{selectedCountry?.name}</span>
         </div>
         <ChevronDown className="w-4 h-4 text-muted-foreground" />
       </DropdownMenuTrigger>
@@ -72,16 +43,17 @@ export default function CountrySelector({
             className={cn(
               "flex items-center gap-2 px-3 py-2 cursor-pointer text-sm",
               "hover:bg-secondary focus:bg-secondary",
-              selectedCountry.id === country.id && "bg-secondary"
+              selectedCountry?.id === country.id && "bg-secondary"
             )}
             onClick={() => {
-              onCountryChange(country);
+              setSelectedCountry(country);
+              setCountry(country.slug);
               setIsOpen(false);
             }}
           >
-            <span className="text-base">{country.flag}</span>
-            <span className="flex-1">{country.name}</span>
-            {selectedCountry.id === country.id && (
+            <span className="text-base">{country?.flag_unicode}</span>
+            <span className="flex-1">{country?.name}</span>
+            {selectedCountry?.id === country.id && (
               <Check className="w-4 h-4 text-primary" />
             )}
           </DropdownMenuItem>
@@ -90,5 +62,3 @@ export default function CountrySelector({
     </DropdownMenu>
   );
 }
-
-export { countries };

@@ -1,59 +1,33 @@
-import { useState, useRef } from "react";
-import { Search, X } from "lucide-react";
+"use client";
+
+import { useRef } from "react";
+import { Search, XCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { parseAsString, useQueryState } from "nuqs";
 
 interface LocationSearchProps {
   placeholder?: string;
   className?: string;
-  onSearch: (searchTerm: string) => void;
 }
 
 export function LocationSearch({
   placeholder = "Search locations...",
   className,
-  onSearch,
 }: LocationSearchProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleSearch = () => {
-    if (searchTerm.trim()) {
-      onSearch(searchTerm.trim());
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
-
-  const clearSearch = () => {
-    setSearchTerm("");
-    inputRef.current?.focus();
-  };
+  const [search, setSearch] = useQueryState("search", parseAsString);
 
   return (
-    <div
-      className={cn(
-        "relative flex items-center transition-all",
-        isFocused && "scale-[1.01]",
-        className
-      )}
-    >
+    <div className={cn("relative flex items-center transition-all", className)}>
       <div className="absolute left-3 flex items-center justify-center text-muted-foreground">
         <Search className="w-5 h-5" />
       </div>
       <Input
         ref={inputRef}
+        defaultValue={search ?? ""}
         type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        onKeyDown={handleKeyDown}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
         className={cn(
           "pl-10 py-6 text-base rounded-xl border bg-white/90",
@@ -61,14 +35,17 @@ export function LocationSearch({
           "transition-all duration-300"
         )}
       />
-      {searchTerm && (
-        <button
-          onClick={clearSearch}
-          className="absolute right-3 text-muted-foreground hover:text-foreground"
-        >
-          <X className="w-5 h-5" />
-        </button>
-      )}
+      <div className="absolute right-3 flex items-center justify-center space-x-2">
+        {search && (
+          <button
+            className="text-muted-foreground"
+            onClick={() => setSearch("")}
+          >
+            <XCircle className="w-5 h-5" />
+          </button>
+        )}
+        <Button className="rounded-md" onClick={() => setSearch(inputRef.current?.value ?? "")}>Search</Button>
+      </div>
     </div>
   );
 }

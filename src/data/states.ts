@@ -1,6 +1,4 @@
-import { State } from "@/components/location-card";
-
-export const statesByCountry: Record<string, State[]> = {
+export const statesByCountry = {
     usa: [
         {
             id: "california",
