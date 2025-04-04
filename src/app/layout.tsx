@@ -7,6 +7,7 @@ import { getCountries } from "@/services/countries.service";
 import { CountriesProvider } from "@/context/countries.context";
 import { ReactQueryProvider } from "@/context/react-query.context";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,9 +39,11 @@ export default async function RootLayout({
         <NuqsAdapter>
           <ReactQueryProvider>
             <CountriesProvider countries={countries}>
-              <NavBar />
-              {children}
-              <Footer />
+              <Suspense>
+                <NavBar />
+                {children}
+                <Footer />
+              </Suspense>
             </CountriesProvider>
           </ReactQueryProvider>
         </NuqsAdapter>

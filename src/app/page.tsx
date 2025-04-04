@@ -1,7 +1,7 @@
- import { Hero } from "./_components/hero";
+import { Hero } from "./_components/hero";
 import { Locations } from "./_components/locations";
 
-const HomePage = async () => {  
+const HomePage = async () => {
   return (
     <>
       <Hero />
