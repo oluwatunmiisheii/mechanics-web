@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  parseAsInteger,
   parseAsString,
   useQueryState,
 } from "nuqs";
@@ -14,7 +13,7 @@ import { LocationApiResponse } from "@/model/countries.model";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import { Wrench } from "lucide-react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Show } from "react-smart-conditional";
 
 const fadeInUp = {
@@ -33,28 +32,25 @@ const staggerContainer = {
 };
 
 export const Locations = () => {
+  const [page, setPage] = useState(1)
   const { selectedCountry } = useCountries();
-  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [search] = useQueryState("search", parseAsString);
 
-  const {
-    data,
-    isLoading,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-  } = useInfiniteQuery<LocationApiResponse>({
-    queryKey: ["locations", selectedCountry?.slug, search],
-    queryFn: ({ pageParam = page }) =>
-      get(`api/countries/${selectedCountry?.slug}/locations?page=${pageParam}`),
-    initialPageParam: page,
-    getNextPageParam: (lastPage) => {
-      return lastPage.next
-        ? Number.parseInt(lastPage.next.split("page=")[1], 10)
-        : undefined;
-    },
-    enabled: !!selectedCountry,
-  });
+  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
+    useInfiniteQuery<LocationApiResponse>({
+      queryKey: ["locations", selectedCountry?.slug, search],
+      queryFn: ({ pageParam = page }) =>
+        get(
+          `api/countries/${selectedCountry?.slug}/locations?page=${pageParam}`
+        ),
+      initialPageParam: page,
+      getNextPageParam: (lastPage) => {
+        return lastPage.next
+          ? Number.parseInt(lastPage.next.split("page=")[1], 10)
+          : undefined;
+      },
+      enabled: !!selectedCountry,
+    });
 
   const locations = data?.pages?.flatMap((page) => page.results) ?? [];
   const total = data?.pages?.[0]?.count ?? 0;
@@ -62,8 +58,7 @@ export const Locations = () => {
   const handleLoadMore = () => {
     fetchNextPage().then((result) => {
       if (result.data) {
-        const newPage = page + 1;
-        setPage(newPage, { shallow: true });
+        setPage((prevPage) => prevPage + 1);
       }
     });
   };

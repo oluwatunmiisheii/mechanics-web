@@ -16,7 +16,7 @@ export const Hero = () => {
 
   return (
     <motion.section
-      className="pt-16 pb-8 px-6 md:px-10 lg:px-16 bg-gradient-to-b from-accent/50 to-white"
+      className="pt-16 pb-8 px-6 md:px-10 lg:px-16 relative"
       initial="hidden"
       animate="visible"
       variants={fadeInUp}
@@ -50,6 +50,9 @@ export const Hero = () => {
             </div>
           </div>
         </motion.div>
+      </div>
+      <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f5f5f5_1px,transparent_1px),linear-gradient(to_bottom,#f5f5f5_1px,transparent_1px)] bg-[size:6rem_4rem]">
+        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#fef2f2,transparent)]"></div>
       </div>
     </motion.section>
   );

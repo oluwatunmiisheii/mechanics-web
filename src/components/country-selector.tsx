@@ -10,12 +10,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useCountries } from "@/context/countries.context";
-import { parseAsString, useQueryState } from "nuqs";
-
 
 export default function CountrySelector() {
   const { countries, selectedCountry, setSelectedCountry } = useCountries();
-  const [, setCountry] = useQueryState("country", parseAsString.withDefault(selectedCountry?.slug ?? ""));
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -47,7 +44,6 @@ export default function CountrySelector() {
             )}
             onClick={() => {
               setSelectedCountry(country);
-              setCountry(country.slug);
               setIsOpen(false);
             }}
           >

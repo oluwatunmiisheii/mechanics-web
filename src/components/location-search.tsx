@@ -39,7 +39,13 @@ export function LocationSearch({
         {search && (
           <button
             className="text-muted-foreground"
-            onClick={() => setSearch("")}
+            onClick={() => {
+              if(inputRef.current) {
+                inputRef.current.value = "";
+                inputRef.current.focus();
+              }
+              setSearch("")
+            }}
           >
             <XCircle className="w-5 h-5" />
           </button>
