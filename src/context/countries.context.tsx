@@ -1,7 +1,7 @@
 "use client";
 
 import { Country } from "@/model/countries.model";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 
 type CountriesContextType = {
   countries: Country[];
@@ -29,12 +29,6 @@ export function CountriesProvider({
     }),
     [countries, selectedCountry]
   );
-
-  useEffect(() => {
-    if (!selectedCountry) {
-      setSelectedCountry(countries[0]); // reset this to the user's country gotten from the IP address
-    }
-  }, [countries, selectedCountry]);
 
   return (
     <CountriesContext.Provider value={value}>

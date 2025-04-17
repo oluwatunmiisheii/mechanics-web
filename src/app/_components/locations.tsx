@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -31,7 +32,8 @@ const staggerContainer = {
   },
 };
 
-export const Locations = () => {
+export const Locations = ({initialLocations, initialCountry}: any) => {
+    const [hasInitiallyFetched, setHasInitiallyFetched] = useState(false);
   const [page, setPage] = useState(1)
   const { selectedCountry } = useCountries();
   const [search] = useQueryState("search", parseAsString);
@@ -49,13 +51,15 @@ export const Locations = () => {
           ? Number.parseInt(lastPage.next.split("page=")[1], 10)
           : undefined;
       },
-      enabled: !!selectedCountry,
+      initialData: { pages: [initialLocations], pageParams: [1] },
+      enabled: hasInitiallyFetched,
     });
 
   const locations = data?.pages?.flatMap((page) => page.results) ?? [];
   const total = data?.pages?.[0]?.count ?? 0;
 
   const handleLoadMore = () => {
+    setHasInitiallyFetched(true);
     fetchNextPage().then((result) => {
       if (result.data) {
         setPage((prevPage) => prevPage + 1);
@@ -74,9 +78,14 @@ export const Locations = () => {
         >
           <div className="flex items-center gap-2">
             <h2 className="text-2xl md:text-3xl font-bold">
-              {search
-                ? `Search results for "${search}"`
-                : `Service locations in ${selectedCountry?.name}`}
+              {search ? (
+                `Search results for "${search}"`
+              ) : (
+                <span className="capitalize">
+                  Service locations in{" "}
+                  {selectedCountry ? selectedCountry?.name : initialCountry}
+                </span>
+              )}
             </h2>
           </div>
           <p className="text-muted-foreground">
@@ -118,7 +127,10 @@ export const Locations = () => {
               exit={{ opacity: 0 }}
             >
               {locations.map((location) => (
-                <motion.div key={`${location.id}-${location.name}`} variants={fadeInUp}>
+                <motion.div
+                  key={`${location.id}-${location.name}`}
+                  variants={fadeInUp}
+                >
                   <LocationCard location={location} />
                 </motion.div>
               ))}

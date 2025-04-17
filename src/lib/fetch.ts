@@ -26,7 +26,6 @@ const createHttpRequestFunction = (method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'D
         const isApiRoute = endpoint.startsWith('api')
         const url = isApiRoute ? endpoint : `${BASE_URL}${endpoint}`
         let formattedBody = body as string | FormData | undefined
-        console.log("🚀 ~ url:", url)
 
         if (body !== undefined && !(body instanceof FormData)) {
             formattedBody = JSON.stringify(body)

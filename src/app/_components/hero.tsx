@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import CountrySelector from "@/components/country-selector";
@@ -5,14 +6,22 @@ import { LocationSearch } from "@/components/location-search";
 import { useCountries } from "@/context/countries.context";
 import { motion } from "framer-motion";
 import { Car } from "lucide-react";
+import { useEffect } from "react";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-export const Hero = () => {
-  const { selectedCountry } = useCountries();
+export const Hero = ({ countries, initialCountry }: any) => {
+  const { selectedCountry, setSelectedCountry } = useCountries();
+  const renderedCountry = selectedCountry ? selectedCountry : initialCountry;
+
+  useEffect(() => {
+    if (!selectedCountry) {
+      setSelectedCountry(initialCountry);
+    }
+  }, [selectedCountry, setSelectedCountry, initialCountry]);
 
   return (
     <motion.section
@@ -25,7 +34,7 @@ export const Hero = () => {
         <motion.div className="mb-8 text-center" variants={fadeInUp}>
           <div className="inline-flex mb-2 rounded-full px-3 py-1 bg-secondary text-sm font-medium text-secondary-foreground">
             <Car className="mr-1 h-4 w-4" /> Find mechanics in{" "}
-            {selectedCountry?.flag_unicode} {selectedCountry?.name}
+            {renderedCountry?.flag_unicode} {renderedCountry?.name}
           </div>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             Professional Mechanics Near You
@@ -42,11 +51,14 @@ export const Hero = () => {
         >
           <div className="flex flex-col sm:flex-row gap-4">
             <LocationSearch
-              placeholder={`Search for mechanics in ${selectedCountry?.name}...`}
+              placeholder={`Search for mechanics in ${renderedCountry?.name}...`}
               className="flex-1"
             />
             <div className="sm:w-auto sm:self-start">
-              <CountrySelector />
+              <CountrySelector
+                countries={countries}
+                defaultSelectedCountry={initialCountry}
+              />
             </div>
           </div>
         </motion.div>
