@@ -29,7 +29,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const countries = await getCountries();
+  // const countries = await getCountries();
 
   return (
     <html lang="en">
@@ -38,7 +38,7 @@ export default async function RootLayout({
       >
         <NuqsAdapter>
           <ReactQueryProvider>
-            <CountriesProvider countries={countries}>
+            <CountriesProvider countries={[]}>
               <Suspense>
                 <NavBar />
                 {children}

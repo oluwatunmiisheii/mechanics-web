@@ -8,8 +8,6 @@ export const getCountries = async (): Promise<Country[]> => {
 }
 
 export const getCountryLocations = async (countrySlug: string, page: number) => {
-    console.log('countrySlug', countrySlug)
-    console.log('page', page)
     const serverLocations = await get <LocationApiResponse>(`/countries/${countrySlug}/locations?page=${page}`)
     return serverLocations
 }

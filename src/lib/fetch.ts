@@ -23,8 +23,8 @@ interface RequestParams {
 const createHttpRequestFunction = (method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE') =>
     async function <T>(endpoint: string, params?: RequestParams): Promise<T> {
         const { body, options } = params ?? {}
-        const isApiRoute = endpoint.startsWith('api')
-        const url = isApiRoute ? endpoint : `${BASE_URL}${endpoint}`
+        const url = `${BASE_URL}${endpoint}`
+        
         let formattedBody = body as string | FormData | undefined
 
         if (body !== undefined && !(body instanceof FormData)) {
@@ -38,10 +38,9 @@ const createHttpRequestFunction = (method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'D
         })
 
         const response = await fetch(url, mergedOptions)
-       
-
 
         if (!response.ok) {
+            console.log("🚀 ~ createHttpRequestFunction ~ response:", response)
             const error = await response.json()
             throw new APIError(response.status, error.detail ?? error.message ?? error?.error ?? 'An error occurred')
         }

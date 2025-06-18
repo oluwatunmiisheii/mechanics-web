@@ -12,13 +12,11 @@ import {
 import { cn } from "@/lib/utils";
 import { useCountries } from "@/context/countries.context";
 
-export default function CountrySelector({countries, defaultSelectedCountry}: any) {
+export default function CountrySelector({countries}: any) {
   const { selectedCountry, setSelectedCountry, countries: stateCountries } = useCountries();
   const [isOpen, setIsOpen] = useState(false);
 
   const countriesList = countries || stateCountries;
-  const renderedCountry = selectedCountry || defaultSelectedCountry;
-  console.log("🚀 ~ CountrySelector ~ renderedCountry:", renderedCountry)
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
@@ -30,8 +28,8 @@ export default function CountrySelector({countries, defaultSelectedCountry}: any
         )}
       >
         <div className="space-x-1 flex items-center">
-          <span className="text-base">{renderedCountry?.flag_unicode}</span>
-          <span className="text-sm font-medium">{renderedCountry?.name}</span>
+          <span className="text-base">{selectedCountry?.flag_unicode}</span>
+          <span className="text-sm font-medium">{selectedCountry?.name}</span>
         </div>
         <ChevronDown className="w-4 h-4 text-muted-foreground" />
       </DropdownMenuTrigger>
