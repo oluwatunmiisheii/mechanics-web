@@ -1,4 +1,3 @@
-'use server';
 import { get } from "@/lib/fetch"
 import type { Country, CountriesApiResponse, LocationApiResponse } from "@/model/countries.model"
 
