@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import CountrySelector from "@/components/country-selector";
 import { LocationSearch } from "@/components/location-search";
 import { useCountries } from "@/context/countries.context";
+import { Country } from "@/model/countries.model";
 import { motion } from "framer-motion";
 import { Car } from "lucide-react";
 import { useEffect } from "react";
@@ -13,7 +13,10 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-export const Hero = ({ countries, initialCountry }: any) => {
+export const Hero = ({ countries, initialCountry }: {
+  countries: Country[];
+  initialCountry: Country;
+}) => {
   const { selectedCountry, setSelectedCountry, } = useCountries();
   const renderedCountry = selectedCountry ? selectedCountry : initialCountry;
 
