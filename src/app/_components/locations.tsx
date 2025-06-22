@@ -37,7 +37,7 @@ export const Locations = ({
           : undefined;
       },
       initialData: { pages: [initialLocations], pageParams: [1] },
-      enabled: initialCountry !== selectedCountry?.name,
+      enabled: false,
     });
 
   const locations = data?.pages?.flatMap((page) => page.results) ?? [];
