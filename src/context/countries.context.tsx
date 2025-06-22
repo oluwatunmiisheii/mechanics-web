@@ -15,7 +15,7 @@ const CountriesContext = createContext<CountriesContextType | undefined>(
 
 export function CountriesProvider({
   children,
-  countries,
+  countries = [],
 }: {
   children: React.ReactNode;
   countries: Country[];

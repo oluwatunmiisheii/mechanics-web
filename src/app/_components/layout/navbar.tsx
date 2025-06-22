@@ -13,7 +13,7 @@ import { useCountries } from "@/context/countries.context";
 export function NavBar() {
   const scrolled = useScroll(15);
   const showSearchInput = useScroll(200);
-  const { selectedCountry } = useCountries();
+  const { selectedCountry, countries } = useCountries();
 
   return (
     <header
@@ -35,7 +35,7 @@ export function NavBar() {
               className="flex-1"
             />
           </div>
-          <CountrySelector />
+          <CountrySelector initialCountries={countries} />
         </div>
       </div>
     </header>
