@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -11,12 +10,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useCountries } from "@/context/countries.context";
+import { Country } from "@/model/countries.model";
 
-export default function CountrySelector({countries}: any) {
-  const { selectedCountry, setSelectedCountry, countries: stateCountries } = useCountries();
+export default function CountrySelector({initialCountries}: {initialCountries: Country[]}) {
+  const { selectedCountry, setSelectedCountry, countries } = useCountries();
   const [isOpen, setIsOpen] = useState(false);
 
-  const countriesList = countries || stateCountries;
+  const countriesList = initialCountries || countries;
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
@@ -37,7 +37,7 @@ export default function CountrySelector({countries}: any) {
         align="start"
         className="w-[200px] animate-scale-in bg-white/95 backdrop-blur-sm"
       >
-        {(countriesList ?? []).map((country: any) => (
+        {countriesList.map((country) => (
           <DropdownMenuItem
             key={country.id}
             className={cn(

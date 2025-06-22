@@ -14,7 +14,7 @@ const fadeInUp = {
 };
 
 export const Hero = ({ countries, initialCountry }: any) => {
-  const { selectedCountry, setSelectedCountry } = useCountries();
+  const { selectedCountry, setSelectedCountry, } = useCountries();
   const renderedCountry = selectedCountry ? selectedCountry : initialCountry;
 
   useEffect(() => {
@@ -55,10 +55,7 @@ export const Hero = ({ countries, initialCountry }: any) => {
               className="flex-1"
             />
             <div className="sm:w-auto sm:self-start">
-              <CountrySelector
-                countries={countries}
-                defaultSelectedCountry={initialCountry}
-              />
+              <CountrySelector initialCountries={countries} />
             </div>
           </div>
         </motion.div>

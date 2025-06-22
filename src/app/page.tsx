@@ -26,7 +26,12 @@ const HomePage = async (props: { searchParams: SearchParams }) => {
 
   const locations = await getCountryLocations(selectedCountry.slug, 1).catch(
     () => {
-      return [];
+      return  {
+        results: [],
+        count: 0,
+        next: null,
+        previous: null,
+      };
     }
   );
 

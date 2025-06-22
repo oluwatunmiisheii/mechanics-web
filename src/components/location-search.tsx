@@ -21,7 +21,7 @@ export function LocationSearch({
 
   return (
     <div className={cn("relative flex items-center transition-all", className)}>
-      <div className="absolute left-3 flex items-center justify-center text-muted-foreground">
+      <div className="absolute left-2 flex items-center justify-center text-muted-foreground">
         <Search className="w-5 h-5" />
       </div>
       <Input
@@ -35,7 +35,7 @@ export function LocationSearch({
           "transition-all duration-300"
         )}
       />
-      <div className="absolute right-3 flex items-center justify-center space-x-2">
+      <div className="absolute right-2 flex items-center justify-center space-x-2">
         {search && (
           <button
             className="text-muted-foreground"

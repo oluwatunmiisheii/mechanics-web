@@ -1,6 +1,6 @@
 import { APIError } from "./utils"
 
-const BASE_URL = process.env.API_BASE_URL as string
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL as string
 
 const baseHeaders: HeadersInit = {
     'Content-Type': 'application/json',
@@ -40,7 +40,6 @@ const createHttpRequestFunction = (method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'D
         const response = await fetch(url, mergedOptions)
 
         if (!response.ok) {
-            console.log("🚀 ~ createHttpRequestFunction ~ response:", response)
             const error = await response.json()
             throw new APIError(response.status, error.detail ?? error.message ?? error?.error ?? 'An error occurred')
         }
