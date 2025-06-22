@@ -73,8 +73,12 @@ export const Locations = ({
             </h2>
           </div>
           <p className="text-muted-foreground">
-            {total} {locations.length === 1 ? "location" : "locations"} with
-            certified mechanics
+            {isFetching ? <Skeleton className="w-64 h-4 mt-2" /> : (
+              <>
+                {total} {locations.length === 1 ? "location" : "locations"} with
+                certified mechanics
+              </>
+            )}
           </p>
         </div>
 
