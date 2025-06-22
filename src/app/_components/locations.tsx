@@ -8,7 +8,7 @@ import { useCountries } from "@/context/countries.context";
 import { LocationApiResponse } from "@/model/countries.model";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Wrench } from "lucide-react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect } from "react";
 import { Show } from "react-smart-conditional";
 import { getCountryLocations } from "@/services/countries.service";
 
@@ -20,36 +20,42 @@ export const Locations = ({
   initialLocations: LocationApiResponse;
   initialCountry: string;
 }) => {
-  const [page, setPage] = useState(1);
   const { selectedCountry } = useCountries();
   const [search] = useQueryState("search", parseAsString);
 
-
-  const { data, isFetching, isFetchingNextPage, hasNextPage, fetchNextPage } =
-    useInfiniteQuery<LocationApiResponse>({
-      queryKey: ["locations", selectedCountry?.slug, search],
-      queryFn: ({ pageParam = page }) =>
-        getCountryLocations(selectedCountry?.slug ?? "", pageParam as number),
-      initialPageParam: page,
-      getNextPageParam: (lastPage) => {
-        return lastPage.next
-          ? Number.parseInt(lastPage.next.split("page=")[1], 10)
-          : undefined;
-      },
-      initialData: { pages: [initialLocations], pageParams: [1] },
-      enabled: initialCountry !== selectedCountry?.name,
-    });
+  const {
+    data,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useInfiniteQuery<LocationApiResponse>({
+    queryKey: ["locations", selectedCountry?.slug, search],
+    queryFn: ({ pageParam = 1 }) =>
+      getCountryLocations(selectedCountry?.slug ?? "", pageParam as number),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      return lastPage.next
+        ? Number.parseInt(lastPage.next.split("page=")[1], 10)
+        : undefined;
+    },
+    initialData: { pages: [initialLocations], pageParams: [1] },
+    enabled: false,
+  });
 
   const locations = data?.pages?.flatMap((page) => page.results) ?? [];
   const total = data?.pages?.[0]?.count ?? 0;
 
-  const handleLoadMore = () => {
-    fetchNextPage().then((result) => {
-      if (result.data) {
-        setPage((prevPage) => prevPage + 1);
-      }
-    });
-  };
+  useEffect(() => {
+    if(!selectedCountry?.name) {
+      return
+    }
+   if(selectedCountry?.name !== initialCountry) {
+      refetch()
+    }
+
+  }, [selectedCountry?.name, initialCountry, refetch]);
 
   return (
     <section className="py-8 px-6 md:px-10 lg:px-16 bg-secondary/30">
@@ -105,7 +111,7 @@ export const Locations = ({
             </div>
             {hasNextPage && (
               <div className="flex w-full justify-center mt-8">
-                <Button onClick={handleLoadMore} disabled={isFetchingNextPage}>
+                <Button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
                   {isFetchingNextPage ? "Loading..." : "Load More"}
                 </Button>
               </div>
